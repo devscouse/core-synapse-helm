@@ -1,0 +1,53 @@
+{{- range .Values.apps }}
+{{- $res := .resources | default dict -}}
+{{- $resreq := $res.requests | default dict -}}
+{{- $reslim := $res.limits | default dict -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-synapse-{{ .name }}
+spec:
+  replicas: {{ .replicas | default $.Values.global.replicas }}
+  selector:
+    matchLabels:
+      app: core-synapse-{{ .name }}
+  template:
+    metadata:
+      labels:
+        app: core-synapse-{{ .name }}
+    spec:
+      containers:
+      - name: core-synapse-{{ .name }}
+        image: "{{ $.Values.global.repository }}:core-synapse-{{ .name }}-{{ .version }}"
+        ports:
+          - containerPort: {{ .port }}
+        resources:
+          requests:
+            memory: {{ $resreq.memory | default "128Mi" }}
+            cpu: {{ $resreq.cpu | default "250m" }}
+          limits:
+            memory: {{ $reslim.memory | default "256Mi" }}
+            cpu: {{ $reslim.cpu | default "500m" }}
+      {{- if .env }}
+      env:
+        {{- range .env }}
+        - name: {{ .name }}
+          value: {{ .value }}
+        {{- end }}
+      {{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "core-synapse-{{ .name }}"
+spec:
+  selector:
+    app: "core-synapse-{{ .name }}"
+  ports:
+    - protocol: TCP
+      port: {{ .port }}
+      targetPort: {{ .port }}
+  type: {{ .service.type | default "ClusterIP" }}
+{{- end }}
