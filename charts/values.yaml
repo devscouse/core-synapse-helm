@@ -7,24 +7,25 @@ appVersion: "latest"
 global:
   repository: devscouse/privatelibrary
   replicas: 1
+  env: sit
 
 apps:
 
   - name: api
     port: 8000
-    version: 0.0.7
+    version: "0.0.9"
     service:
-      type: NodePort
+      type: ClusterIP
 
   - name: sentiment-analysis
     port: 5000
-    version: 0.0.6
+    version: "0.0.7"
     service:
       type: ClusterIP
 
   - name: ui
     port: 8080
-    version: 0.0.1
+    version: "d9c8c04"
     resources:
       limits:
         memory: "256Mi"
@@ -34,4 +35,7 @@ apps:
         cpu: "250m"
     service:
       type: NodePort
+    env:
+      - name: svc_api_url
+        value: http://core-synapse-api:8000/
 

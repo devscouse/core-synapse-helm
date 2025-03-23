@@ -1,0 +1,17 @@
+{{- range .Values.apps }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "core-synapse-{{ .name }}"
+spec:
+  selector:
+    app: "core-synapse-{{ .name }}"
+  ports:
+    - protocol: TCP
+      port: {{ .port }}
+      targetPort: {{ .port }}
+  type: {{ .service.type | default "ClusterIP" }}
+
+{{- end }}
+---
