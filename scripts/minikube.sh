@@ -22,6 +22,7 @@ fi
 
 if $UPGRADE_HELM; then
     bash -c scripts/upgrade.sh
+    sleep 3
 fi
 
 bash scripts/minikube_expose.sh
