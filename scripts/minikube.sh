@@ -16,13 +16,11 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if $INIT_MINIKUBE; then
-    chmod +x scripts/minikube_init.sh
     source scripts/minikube_init.sh
     minikube status
 fi
 
 if $UPGRADE_HELM; then
-    chmod +x scripts/upgrade.sh
     bash -c scripts/upgrade.sh
 fi
 
