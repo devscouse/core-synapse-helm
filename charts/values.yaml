@@ -13,19 +13,19 @@ apps:
 
   - name: api
     port: 8000
-    version: "0.0.9"
+    version: "0.0.10"
     service:
       type: ClusterIP
 
   - name: sentiment-analysis
     port: 5000
-    version: "0.0.7"
+    version: "0.0.8"
     service:
       type: ClusterIP
 
   - name: ui
     port: 8080
-    version: "d9c8c04"
+    version: "596cc23"
     resources:
       limits:
         memory: "256Mi"
